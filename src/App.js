@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button, InputContainer, PageWrapper, TodoCard, TodoContainer, TodoHeader, TodoListContainer } from "./components/styles";
-import { v4 as uuidv4 } from "uuid";
 import { useDispatch, useSelector } from "react-redux";
-import { __addToDo, __deleteTodo, __getToDo } from "./redux/modules/todosSlice";
-import { waitTwoSeconds } from "./utils";
+import { __addToDo, __deleteTodo } from "./redux/modules/todosSlice";
+import nextId from "react-id-generator";
 
 function App() {
-  const id = uuidv4();
+  const id = nextId();
   const dispatch = useDispatch();
   const { isLoading, todos } = useSelector((state) => {
     return state.todos;
@@ -22,20 +21,12 @@ function App() {
   const onAddTodo = () => {
     const todo = { id, title, body };
     resetInputs();
-    waitTwoSeconds().then(() => {
-      dispatch(__addToDo(todo));
-    });
+    dispatch(__addToDo(todo));
   };
 
   const onDeleteTodo = (id) => {
-    waitTwoSeconds().then(() => {
-      dispatch(__deleteTodo(id));
-    });
+    dispatch(__deleteTodo(id));
   };
-
-  useEffect(() => {
-    dispatch(__getToDo());
-  }, []);
 
   const onChangeTitle = (e) => setTitle(e.target.value);
   const onChangeBody = (e) => setBody(e.target.value);
